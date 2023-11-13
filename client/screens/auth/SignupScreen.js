@@ -28,7 +28,7 @@ const SignupScreen = ({ navigation }) => {
   myHeaders.append("Content-Type", "application/json");
 
   const requestBody = {
-    email: email,
+    email: email.toLowerCase(),
     password: password,
     name: name,
     userType: "USER",
@@ -77,8 +77,8 @@ const SignupScreen = ({ navigation }) => {
       })
       .then((data) => {
         const userData = data.data
-        console.log('DATA:', userData);
-        if (userData && userData.email === email) {
+        console.log('DATA:', userData.email);
+        if (userData && userData.email == email.toLowerCase()) {
           navigation.navigate("tesserareg", { email, name });
         } else {
           console.log("Email not found in response");

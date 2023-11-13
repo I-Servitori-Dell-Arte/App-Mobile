@@ -186,11 +186,33 @@ module.exports.updateTessera = async (req, res) => {
 
 module.exports.associaTessera = async (req, res) => {
   try {
-    const { email, name, numeroTessera, dataScadenza } = req.body;
+    const { email, name, numeroTessera } = req.body;
 
-    const tessere = await Tessera.find();
-    const tessera = tessere.filter((item) => item.numeroTessera == numeroTessera);
+    const tessera = await Tessera.findOne({numeroTessera: numeroTessera});
+    const user = await User.findOne({email: email});
     console.log(tessera);
+
+    if(!tessera){
+      return res.status(401).json({
+        success: false,
+        status: 400,
+        message: 'Nessuna tessera esistente'
+      })
+    }
+    
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        status: 400,
+        message: 'Utente non trovato'
+      });
+    }
+
+    user.tessera = tessera._id;
+    tessera.user = user._id;
+
+    await user.save();
+    await tessera.save();
 
     return res.json({
       success: true,

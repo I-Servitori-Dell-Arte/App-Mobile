@@ -11,19 +11,35 @@ module.exports.createPayment = async (req, res) => {
         const paymentIntent = await stripe.paymentIntents.create({
             amount: 1000, 
             currency: 'eur', 
-            description: 'Esempio di pagamento',
+            description: 'Pagamento Tessera associativa App',
             payment_method_types: ['card'],
-            customer: customer.id, // Collega il pagamento al cliente creato
+            customer: customer.id,
         });
 
         const clientSecret = paymentIntent.client_secret;
         console.log(clientSecret);
 
-        res.json({ clientSecret: clientSecret });
+        res.json({ clientSecret: clientSecret, paymentIntentId: paymentIntent.id });
     } catch (error) {
         console.error(error);
         res.json(error);
     }
+}
+
+module.exports.confirmPayment = async (req, res) => {
+    const { paymentMethodId, paymentIntentId } = req.body;
+    console.log(paymentMethodId);
+    
+        try {
+            const paymentIntent = await stripe.paymentIntents.confirm(paymentIntentId, {
+                payment_method: paymentMethodId,
+            });
+    
+            res.json({ success: true, paymentIntent });
+        } catch (error) {
+            console.error(error);
+            res.json({ success: false, error: error.message });
+        }
 }
 
 module.exports.orders = async (req, res) => {

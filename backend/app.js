@@ -39,10 +39,10 @@ const { checkout, addToCart, cart, removeFromCart } = require("./controllers/use
 const { isAdmin, checkAuth } = require("./controllers/middlewares/auth");
 const { dashboardData, getAllUsers } = require('./controllers/admin/dashboard');
 const { getAllOrders, changeStatusOfOrder } = require('./controllers/admin/orders');
-const { orders, createPayment } = require('./controllers/user/orders');
+const { orders, createPayment, confirmPayment } = require('./controllers/user/orders');
 const { addCategory, getCategories, updateCategory, deleteCategory } = require('./controllers/categories/category');
 const { addToWishlist, wishlist, removeFromWishlist } = require('./controllers/user/wishlist');
-const {createTessera, getTessere, updateTessera, deleteTessera, createTesseraAdmuin} = require('./controllers/tessera/tessera');
+const {createTessera, getTessere, updateTessera, deleteTessera, createTesseraAdmuin, associaTessera} = require('./controllers/tessera/tessera');
 const tessera = require('./models/tessera');
 const { Console } = require('console');
 const { addPartecipazione } = require('./controllers/user/partecipazioni');
@@ -86,10 +86,12 @@ app.post("/create-tessera-admin", createTesseraAdmuin);
 app.get("/get-tessere", getTessere);
 app.post("/update-tessera", [isAdmin], updateTessera)
 app.get("/delete-tessera", [isAdmin], deleteTessera)
+app.post("/associa-tessera", associaTessera);
 
 // ORDERS
 app.get("/orders",[checkAuth],orders)
 app.post("/create-payment", createPayment)
+app.post("/confirm-payment", confirmPayment);
 
 // CHECKOUT
 app.post("/checkout",[checkAuth],checkout)

@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }) => {
   myHeaders.append("Content-Type", "application/json");
 
   var raw = JSON.stringify({
-    email: email,
+    email: email.toLowerCase(),
     password: password,
   });
 

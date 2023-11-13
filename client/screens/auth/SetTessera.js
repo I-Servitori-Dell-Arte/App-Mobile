@@ -14,24 +14,25 @@ import LottieView from 'lottie-react-native';
 function PaymentScreen({setVuolePagare, handleCrea, email}) {
   const { confirmPayment } = useStripe();
   const [clientSecret, setClientSecret] = useState(''); 
-  console.log(clientSecret);
+  const [paymentIntentId, setPayIntId] = useState("");
+  console.log(paymentIntentId);
   const [paymentInProgress, setPaymentInProgress] = useState(false);
   const [ok, setOk] = useState(false);
 
 
   const fetchClientSecret = async () => {
     try {
-      const email = 'email@example.com'; // Sostituisci con l'email desiderata
       const response = await fetch(network.serverip + "/create-payment", {
         method: "POST", // Cambia il metodo da "GET" a "POST"
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email }), // Passa l'email come corpo (body) della richiesta
+        body: JSON.stringify({ email }), 
       });
       const data = await response.json();
       console.log(data);
       setClientSecret(data.clientSecret);
+      setPayIntId(data.paymentIntentId);
     } catch (error) {
       console.error(error);
     }
@@ -41,25 +42,57 @@ function PaymentScreen({setVuolePagare, handleCrea, email}) {
     fetchClientSecret();
   }, []);
 
-  const handlePayment = async () => {
-    setPaymentInProgress(true);
+  const confirmPaymentBack = async (paymentMethodId) => {
+    console.log(paymentMethodId);
     try {
-      const { paymentMethodId } = await confirmPayment(clientSecret, {
-        type: 'CardField',
-        billingDetails: {
-          email: 'example@example.com',
+      const response = await fetch(network.serverip+'/confirm-payment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          paymentMethodId: paymentMethodId,
+          paymentIntentId: paymentIntentId,
+        }),
       });
 
-      // Esegui azioni supplementari dopo un pagamento riuscito
+      const result = await response.json();
+      console.log(result);
+
       setPaymentInProgress(false);
       setOk(true);
       setTimeout(() => {
         setVuolePagare(false);
         handleCrea();
-      }, 10000)
+      }, 2000)
 
-      console.log('Pagamento riuscito con il metodo:', paymentMethodId);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handlePayment = async () => {
+    setPaymentInProgress(true);
+    try {
+      const confirmPaymentResponse = await confirmPayment(clientSecret, {
+        paymentMethodType: 'Card',
+        billingDetails: {
+          email: email,
+        },
+      });
+      
+      
+      const paymentMethodId = confirmPaymentResponse.paymentIntent.paymentMethodId;;
+      console.log('paymentMethodId:', paymentMethodId);
+
+      confirmPaymentBack(paymentMethodId);
+      //setPaymentInProgress(false);
+      /*setOk(true);
+      setTimeout(() => {
+        setVuolePagare(false);
+        handleCrea();
+      }, 10000)*/
+
     } catch (error) {
       console.error('Errore nel pagamento:', error);
     }
@@ -94,8 +127,8 @@ function PaymentScreen({setVuolePagare, handleCrea, email}) {
         autoPlay
       />
     )}
-    <TouchableOpacity style={styles.btnAvanti} onPress={clientSecret !== "" ? handlePayment : null}>
-      <Text>{paymentInProgress ? "Pagamento in corso.." : "Paga"}</Text>
+    <TouchableOpacity style={styles.paga} onPress={clientSecret !== "" ? handlePayment : null}>
+      <Text style={{color: 'white'}}>{paymentInProgress ? "Pagamento in corso.." : "Paga"}</Text>
     </TouchableOpacity>
     </>
   );
@@ -138,7 +171,7 @@ const SetTessera = ({ navigation, route }) => {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify({
-      email: email,
+      email: email.toLowerCase(),
       name: name, 
       dataNascita: dataNascita,
       residenza: residenza,
@@ -171,7 +204,29 @@ const SetTessera = ({ navigation, route }) => {
     }
 
     const handleAssocia = () => {
-
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+          email: email.toLowerCase(),
+          numeroTessera: numTessera,
+          name: name,
+        }),
+        redirect: "follow",
+      };
+      fetch(network.serverip + "/associa-tessera", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success === true) {
+          console.log("Tessera associata con successo", result.data);
+          navigation.navigate('login');
+        } else {
+          console.log("Errore durante la creazione della tessera", result.message);
+        }
+      })
+      .catch((error) => {
+        console.log("Errore:", error);
+      });
     }
 
   return (
@@ -210,12 +265,12 @@ const SetTessera = ({ navigation, route }) => {
       </View>
       {isYes ? (
         <ScrollView style={styles.tessera}>
+            <Text style={{color: '#FFF', marginVertical: 5, fontSize: 16, textAlign: 'center'}}>Associa la tua tessera</Text>
             <View>
                 <Text style={{color: '#FFF', marginVertical: 5, fontSize: 12}}>Nome completo: {name}</Text>
                 <Text style={{color: '#FFF', marginVertical: 5, fontSize: 12}}>Email: {email}</Text>
             </View>
             <View>
-                <Text style={{color: '#FFF', marginVertical: 5, fontSize: 12}}>Data scadenza: {formattedDate && formattedDate}</Text> 
                 <Text style={{color: '#FFF', marginVertical: 5, fontSize: 12}}>Numero Tessera: {numTessera}</Text>         
             </View>
             <View>
@@ -354,7 +409,7 @@ const styles = StyleSheet.create({
   },
   tessera: {
     width: '98%',
-    height: 200,
+    height: 100,
     borderRadius: 10,
     backgroundColor: colors.light_black,
     color: '#FFF',
@@ -389,5 +444,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 10,
     backgroundColor: colors.primary,
-  }
+  },
+  paga: {
+    bottom: 0,
+    padding: 15,
+    width: "100%",
+    marginBottom: 10,
+    alignItems: "center",
+    marginTop: 20,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+  },
 });
