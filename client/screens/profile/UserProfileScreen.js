@@ -16,7 +16,6 @@ import * as Progress from 'react-native-progress';
 const UserProfileScreen = ({ navigation, route }) => {
   const [userInfo, setUserInfo] = useState({});
   const { user } = route.params;
-  console.log(user);
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -30,9 +29,10 @@ const UserProfileScreen = ({ navigation, route }) => {
     redirect: "follow",
   };
 
-  const completionPercentage = user.partecipazione5 && user.partecipazione5 <= 5 ? (user.partecipazione5 / 5) * 100 : (5 / 5) * 100;
-  const completionPercentage3 = user.partecipazione && user.partecipazione <= 3 ? (user.partecipazione / 3) * 100 : (3 / 3) * 100;
+  const completionPercentage = user.partecipazione5 && user.partecipazione5 >= 6 ? 5 / 5 : user.partecipazione5 / 5;
+  const completionPercentage3 = user.partecipazione && user.partecipazione >= 4 ? 3 / 3 : user.partecipazione / 3;
 
+  console.log(user.partecipazione, user.partecipazione5);
   const convertToJSON = (obj) => {
     try {
       setUserInfo(JSON.parse(obj));
@@ -99,30 +99,30 @@ const UserProfileScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.obiettivi}>
         <View style={styles.obItem}>
-          <Text style={{color: 'white'}}>{`Partecipazioni per la tessera gratuita: ${user.partecipazione}/3`}</Text>
+          <Text style={{color: 'white'}}>Partecipazioni per la tessera gratuita: {user.partecipazione && user.partecipazione >= 4 ? 3 : user.partecipazione}/3</Text>
           <Progress.Bar
-          progress={completionPercentage3 && completionPercentage3 / 100} 
+          progress={completionPercentage3 && completionPercentage3} 
           //width={100}
           color="#fff"
           style={{ marginVertical: 10, width: '100%' }} />
-          {user.partecipazione && user.partecipazione >= 3 && (
+          {user.partecipazione && user.partecipazione >= 3 ? (
             <TouchableOpacity onPress={handleOttieniTessera} style={styles.ottieni}>
               <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Tessera</Text>
             </TouchableOpacity>  
-          )}
+          ) : null}
         </View>
         <View style={styles.obItem}>
-          <Text style={{color: 'white'}}>{`Partecipazioni per lo sconto: ${user.partecipazione5}/5`}</Text>
+          <Text style={{color: 'white'}}>Partecipazioni per lo sconto: {user.partecipazione5 && user.partecipazione5 >= 6 ? 5 : user.partecipazione5}/5</Text>
           <Progress.Bar
-          progress={completionPercentage && completionPercentage / 100} 
+          progress={completionPercentage && completionPercentage} 
           //width={100}
           color="#fff"
           style={{ marginVertical: 10, width: '100%' }} />
-          {user.partecipazione5 && user.partecipazione5 >= 5 && (
+          {user.partecipazione5 && user.partecipazione5 >= 5 ? (
             <TouchableOpacity onPress={handleOttieniSconto} style={styles.ottieni}>
-              <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Tessera</Text>
-            </TouchableOpacity>  
-          )}
+              <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Sconto</Text>
+          </TouchableOpacity> 
+          ): null}
         </View>
       </View>
 
