@@ -19,13 +19,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.iservitoridellarte"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.iservitoridellarte"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,6 +39,11 @@
           "enableGooglePay": true
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fdefbf48-cd51-4ab4-b8e3-fbe9d8de0c83"
+      }
+    }
   }
 }
