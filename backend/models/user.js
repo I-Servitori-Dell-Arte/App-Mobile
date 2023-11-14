@@ -13,6 +13,9 @@ const userSchema = mongoose.Schema({
     resetCode: String,
     tessera: {type: mongoose.Schema.Types.ObjectId, ref : "Tessera"},
     partecipazione: {type : Number, default: 0},
+    partecipazione5: {type: Number, default: 0},
+    tesseraGratis: {type: Boolean, default: false},
+    scontoGratis: {type: Boolean, default: false},
 },{timestamps: true})
 
 

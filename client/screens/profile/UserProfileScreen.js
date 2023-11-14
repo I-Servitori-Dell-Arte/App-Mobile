@@ -18,7 +18,19 @@ const UserProfileScreen = ({ navigation, route }) => {
   const { user } = route.params;
   console.log(user);
 
-  const completionPercentage = user.partecipazione && user.partecipazione <= 5 ? (user.partecipazione / 5) * 100 : (5 / 5) * 100;
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  var requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify({
+      id: user._id,
+    }),
+    redirect: "follow",
+  };
+
+  const completionPercentage = user.partecipazione5 && user.partecipazione5 <= 5 ? (user.partecipazione5 / 5) * 100 : (5 / 5) * 100;
   const completionPercentage3 = user.partecipazione && user.partecipazione <= 3 ? (user.partecipazione / 3) * 100 : (3 / 3) * 100;
 
   const convertToJSON = (obj) => {
@@ -33,6 +45,40 @@ const UserProfileScreen = ({ navigation, route }) => {
   useEffect(() => {
     convertToJSON(user);
   }, []);
+
+  const handleOttieniTessera = () => {
+    fetch(network.serverip + "/ottieni-tessera", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success === true) {
+        console.log("Tesseraa Ottenuta", result.data);
+        setUserInfo(result.data);
+      } else {
+        console.log("Errore durante la creazione della tessera", result.message);
+      }
+    })
+    .catch((error) => {
+      console.log("Errore:", error);
+      
+    });
+  }
+
+  const handleOttieniSconto = () => {
+    fetch(network.serverip + "/ottieni-sconto", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      if (result.success === true) {
+        console.log("Sconto ottenuto", result.data);
+        setUserInfo(result.data);
+      } else {
+        console.log("Errore durante la creazione della tessera", result.message);
+      }
+    })
+    .catch((error) => {
+      console.log("Errore:", error);
+    });
+  }
+  
   return (
     <View style={styles.container}>
       <StatusBar style="auto"></StatusBar>
@@ -59,14 +105,24 @@ const UserProfileScreen = ({ navigation, route }) => {
           //width={100}
           color="#fff"
           style={{ marginVertical: 10, width: '100%' }} />
+          {user.partecipazione && user.partecipazione >= 3 && (
+            <TouchableOpacity onPress={handleOttieniTessera} style={styles.ottieni}>
+              <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Tessera</Text>
+            </TouchableOpacity>  
+          )}
         </View>
         <View style={styles.obItem}>
-          <Text style={{color: 'white'}}>{`Partecipazioni per lo sconto: ${user.partecipazione}/5`}</Text>
+          <Text style={{color: 'white'}}>{`Partecipazioni per lo sconto: ${user.partecipazione5}/5`}</Text>
           <Progress.Bar
           progress={completionPercentage && completionPercentage / 100} 
           //width={100}
           color="#fff"
           style={{ marginVertical: 10, width: '100%' }} />
+          {user.partecipazione5 && user.partecipazione5 >= 5 && (
+            <TouchableOpacity onPress={handleOttieniSconto} style={styles.ottieni}>
+              <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Tessera</Text>
+            </TouchableOpacity>  
+          )}
         </View>
       </View>
 
@@ -167,5 +223,13 @@ const styles = StyleSheet.create({
   },
   OptionsContainer: {
     width: "100%",
+  },
+  ottieni: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: colors.light,
+    borderColor: colors.light_black,
+    borderWidth: 2,
+    marginTop: 10,
   },
 });

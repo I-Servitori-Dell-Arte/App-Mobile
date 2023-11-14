@@ -3,7 +3,7 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "../../constants";
 
-const UserList = ({ username, email, onPress, partecipazione }) => {
+const UserList = ({ username, email, onPress, partecipazione, tesseraGratis, scontoGratis }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.profileContainer}>
@@ -17,6 +17,8 @@ const UserList = ({ username, email, onPress, partecipazione }) => {
         <Text style={styles.usernameText}>{username}</Text>
         <Text style={styles.userEmailText}>{email}</Text>
         <Text style={styles.userEmailText}>Partecipazioni: {partecipazione}</Text>
+        <Text style={styles.userEmailText}>Tessera Gratuita: {tesseraGratis}</Text>
+        <Text style={styles.userEmailText}>Sconto Gratuito: {scontoGratis}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -31,12 +33,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: colors.white,
-    height: 70,
+    height: 'auto',
     borderRadius: 10,
     elevation: 2,
     marginLeft: 10,
     marginRight: 10,
     margin: 5,
+    paddingVertical: 10,
   },
   profileContainer: {
     display: "flex",

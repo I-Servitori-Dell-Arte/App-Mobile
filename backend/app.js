@@ -45,7 +45,7 @@ const { addToWishlist, wishlist, removeFromWishlist } = require('./controllers/u
 const {createTessera, getTessere, updateTessera, deleteTessera, createTesseraAdmuin, associaTessera} = require('./controllers/tessera/tessera');
 const tessera = require('./models/tessera');
 const { Console } = require('console');
-const { addPartecipazione } = require('./controllers/user/partecipazioni');
+const { addPartecipazione, ottieniTessera, ottieniSconto } = require('./controllers/user/partecipazioni');
 const mongoose = require("./config/database")()
 
 
@@ -109,6 +109,8 @@ app.get("/admin/users",[isAdmin],getAllUsers)
 
 // PARTECIPAZIONE 
 app.post("/add-part", addPartecipazione)
+app.post("/ottieni-tessera", ottieniTessera)
+app.post("/ottieni-sconto", ottieniSconto)
 
 // HELPER
 app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {  

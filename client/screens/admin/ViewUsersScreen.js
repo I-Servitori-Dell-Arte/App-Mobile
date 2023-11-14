@@ -219,6 +219,8 @@ const ViewUsersScreen = ({ navigation, route }) => {
               usertype={item?.userType}
               onPress={() => handleEdit(item)}
               partecipazione={item?.partecipazione ? item.partecipazione : '0'}
+              tesseraGratis={item?.tesseraGratis ? item.tesseraGratis == true ? "Si" : "No" : ""}
+              scontoGratis={item?.scontoGratis ? item.scontoGratis == true ? "Si" : "No" : ""}
             />
           ))
           :
