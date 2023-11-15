@@ -9,7 +9,6 @@ import { StripeProvider } from '@stripe/stripe-react-native';
 import { CardField, useStripe } from '@stripe/stripe-react-native';
 import loading from '../../assets/loading.json';
 import success from '../../assets/success.json';
-import LottieView from 'lottie-react-native';
 
 function PaymentScreen({setVuolePagare, handleCrea, email}) {
   const { confirmPayment } = useStripe();
@@ -121,12 +120,12 @@ function PaymentScreen({setVuolePagare, handleCrea, email}) {
         console.log('focusField', focusedField);
       }}
     />
-    {ok && (
+    {/*ok && (
       <LottieView
         source={success} 
         autoPlay
       />
-    )}
+    )*/}
     <TouchableOpacity style={styles.paga} onPress={clientSecret !== "" ? handlePayment : null}>
       <Text style={{color: 'white'}}>{paymentInProgress ? "Pagamento in corso.." : "Paga"}</Text>
     </TouchableOpacity>

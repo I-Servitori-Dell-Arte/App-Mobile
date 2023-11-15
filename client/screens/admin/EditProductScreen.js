@@ -20,6 +20,7 @@ import ProgressDialog from "react-native-progress-dialog";
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import 'moment/locale/it';
 moment.locale('it');
 
@@ -38,6 +39,8 @@ const EditProductScreen = ({ navigation, route }) => {
   const [alertType, setAlertType] = useState("error");
   const [link, setLink] = useState("");
   const [data, setData] = useState(product.data ? product.data : "");
+  const [dataScadMod, setDataScadMod] = useState(new Date(product?.data && product.data));
+  const [luogo, setLuogo] = useState("");
 
   var myHeaders = new Headers();
   myHeaders.append("x-auth-token", authUser.token);
@@ -52,6 +55,8 @@ const EditProductScreen = ({ navigation, route }) => {
     category: category,
     quantity: quantity,
     link: link,
+    data: dataScadMod,
+    luogo: luogo,
   });
 
   var requestOptions = {
@@ -123,9 +128,10 @@ const EditProductScreen = ({ navigation, route }) => {
     setLink(product.link ? product.link : "");
     setData(product.data ? product.data : "");
     setSku(product.sku);
-    setQuantity(product.quantity.toString());
-    setPrice(product.price.toString());
+    setQuantity(product?.quantity?.toString());
+    setPrice(product?.price?.toString());
     setDescription(product.description);
+    setLuogo(product?.luogo);
   }, []);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -141,6 +147,15 @@ const EditProductScreen = ({ navigation, route }) => {
   const handleConfirm = (date) => {
     setData(date);
     hideDatePicker();
+  };
+
+  const onChangeDate = (event, selected) => {
+    if (event.type === 'set') {
+      setDataScadMod(selected);
+      console.log(selected);
+    } else if (event.type === 'dismissed') {
+      return
+    }
   };
 
   return (
@@ -207,14 +222,14 @@ const EditProductScreen = ({ navigation, route }) => {
             placeholderTextColor={colors.muted}
             radius={5}
           />
-          <CustomInput
+          {/*<CustomInput
             value={price}
             setValue={setPrice}
             placeholder={"Prezzo"}
             keyboardType={"number-pad"}
             placeholderTextColor={colors.muted}
             radius={5}
-          />
+            />*/}
           <CustomInput
             value={quantity}
             setValue={setQuantity}
@@ -230,18 +245,27 @@ const EditProductScreen = ({ navigation, route }) => {
             placeholderTextColor={colors.muted}
             radius={5}
           />
-          <Button
-              title="Seleziona Data"
-              onPress={showDatePicker}
-            />
-          {data && data !== "" && (
-            <Text>Data selezionata: {data.toString()}</Text>
-          )}
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
+          <CustomInput
+            value={luogo}
+            setValue={setLuogo}
+            placeholder={"Seleziona Luogo"}
+            placeholderTextColor={colors.muted}
+            radius={5}
+          />
+          <Text style={{
+            fontSize: 22,
+            marginTop: 26,
+            marginBottom: 10,
+            fontWeight: '500',
+            color: colors.muted,
+            textAlign: 'center',
+          }}>Modifica la data</Text>
+          <DateTimePicker
+            value={dataScadMod && dataScadMod}
             mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
           />
         </View>
       </ScrollView>

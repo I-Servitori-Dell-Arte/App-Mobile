@@ -341,20 +341,14 @@ const AddProductScreen = ({ navigation, route }) => {
             placeholderTextColor={colors.muted}
             radius={5}
           />
-            <Button
-              title="Seleziona Data"
-              onPress={showDatePicker}
-            />
-          {/*selectedDate && (
-            <Text>Data selezionata: {selectedDate.toDateString()}</Text>
-          )*/}
-          {/*<DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-            locale="it-IT"
-          />*/}
+          <Text style={{
+            fontSize: 22,
+            marginTop: 26,
+            marginBottom: 10,
+            fontWeight: '500',
+            color: colors.muted,
+            textAlign: 'center',
+          }}>Seleziona la data</Text>
           <DateTimePicker
             value={selectedDate}
             mode="date"

@@ -266,47 +266,51 @@ const ProductDetailScreen = ({ navigation, route }) => {
             </TouchableOpacity>  
           </View>
             <View style={styles.productInfoTopContainer}>
-              <View style={styles.productNameContaier}>
-                <Text style={styles.productNameText}>{product?.title}</Text>
-              </View>
-              <View style={styles.infoButtonContainer}>
-                <View>
-                  <View style={styles.dataLoc}>
-                    <Image style={styles.imageDat} source={data} />
-                    <Text style={styles.testoIcona}>{moment(product?.data).locale('it').format('DD/MM/YYYY HH:mm')}</Text>
+                <View style={styles.productNameContaier}>
+                  <Text style={styles.productNameText}>{product?.title}</Text>
+                </View>
+                <View style={styles.infoButtonContainer}>
+                  <View>
+                    <View style={styles.dataLoc}>
+                      <Image style={styles.imageDat} source={data} />
+                      <Text style={styles.testoIcona}>{moment(product?.data).locale('it').format('DD/MM/YYYY HH:mm')}</Text>
+                    </View>
+                    <View style={styles.dataLoc}>
+                      <Image style={styles.imageDat} source={luogo} />
+                      <Text style={styles.testoIcona}>{product.luogo ? product.luogo : 'Nessun luogo'}</Text>
+                    </View>
                   </View>
-                  <View style={styles.dataLoc}>
-                    <Image style={styles.imageDat} source={luogo} />
-                    <Text style={styles.testoIcona}>{product.luogo ? product.luogo : 'Nessun luogo'}</Text>
+                  <View style={styles.wishlistButtonContainer}>
+                    <TouchableOpacity
+                      disabled={isDisable}
+                      style={styles.iconContainer}
+                      onPress={() => handleWishlistBtn()}
+                    >
+                      {onWishlist == false ? (
+                        <Ionicons name="heart" size={25} color={colors.muted} />
+                      ) : (
+                        <Ionicons name="heart" size={25} color={colors.danger} />
+                      )}
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View style={styles.wishlistButtonContainer}>
-                  <TouchableOpacity
-                    disabled={isDisable}
-                    style={styles.iconContainer}
-                    onPress={() => handleWishlistBtn()}
-                  >
-                    {onWishlist == false ? (
-                      <Ionicons name="heart" size={25} color={colors.muted} />
-                    ) : (
-                      <Ionicons name="heart" size={25} color={colors.danger} />
-                    )}
-                  </TouchableOpacity>
-                </View>
-              </View>
-              {/*<View style={styles.productDetailContainer}>
-                <View style={styles.productSizeOptionContainer}>
-                </View>
-                <View style={styles.productPriceContainer}>
-                  <Text style={styles.secondaryTextSm}>Price:</Text>
-                  <Text style={styles.primaryTextSm}>{product?.price},00€</Text>
-                </View>
-              </View>*/}
-              <View style={styles.productDescriptionContainer}>
-                <Text style={styles.secondaryTextSm}>Descrizione:</Text>
-                <Text>{product?.description}</Text>
-              </View>
-          </View>             
+                {/*<View style={styles.productDetailContainer}>
+                  <View style={styles.productSizeOptionContainer}>
+                  </View>
+                  <View style={styles.productPriceContainer}>
+                    <Text style={styles.secondaryTextSm}>Price:</Text>
+                    <Text style={styles.primaryTextSm}>{product?.price},00€</Text>
+                  </View>
+                </View>*/}
+                  <ScrollView>
+                  <View style={styles.productDescriptionContainer}>
+                    <Text style={styles.secondaryTextSm}>Descrizione:</Text>
+                    <Text>{product?.description}</Text>   
+                   </View>             
+                  </ScrollView>
+                
+            </View>            
+           
           <View style={styles.productInfoBottomContainer}>
 {/*            <View style={styles.counterContainer}>
               <View style={styles.counter}>

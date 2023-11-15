@@ -189,7 +189,7 @@ const CategoriesScreen = ({ navigation, route }) => {
         <View></View>
         <TouchableOpacity
           style={styles.cartIconContainer}
-          onPress={() => navigation.navigate("cart")}
+          //onPress={() => navigation.navigate("cart")}
         >
           {cartproduct?.length > 0 ? (
             <View style={styles.cartItemCountContainer}>

@@ -21,14 +21,17 @@ const WishList = ({
         <View style={styles.imageContainer}>
           <Image
             source={{ uri: image }}
-            style={{ height: 40, width: "auto", resizeMode: "contain" }}
+            style={{ height: 60, width: "auto", resizeMode: "contain" }}
           />
         </View>
         <View style={styles.categoryInfo}>
-          <Text style={styles.categoryTitle}>{title}</Text>
+          <Text style={styles.categoryTitle}>{title.substring(
+            0,
+            18
+          )}..</Text>
           <Text style={styles.categoryDescription}>{`${description.substring(
             0,
-            30
+            27
           )}..`}</Text>
         </View>
       </View>
@@ -72,14 +75,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     padding: 10,
+    paddingHorizontal: 0,
     backgroundColor: colors.white,
     height: 80,
     borderRadius: 10,
     margin: 5,
   },
   imageContainer: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     elevation: 5,
     display: "flex",
     justifyContent: "center",
