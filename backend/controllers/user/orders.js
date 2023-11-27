@@ -1,5 +1,6 @@
 const ordersModel = require("../../models/order");
-const stripe = require('stripe')('sk_test_51N1TzKKy8OcUrFfrU2mW5nUC3kEBLccBV2974HaHTuylMHFCl7Lw8qBHtJ1ppXlimbFIZ9gSCM8izR2sbKVAJNFG00nytofunW');
+const stripe = require('stripe')('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');
+//('sk_test_51N1TzKKy8OcUrFfrU2mW5nUC3kEBLccBV2974HaHTuylMHFCl7Lw8qBHtJ1ppXlimbFIZ9gSCM8izR2sbKVAJNFG00nytofunW');
 
 module.exports.createPayment = async (req, res) => {
     try {

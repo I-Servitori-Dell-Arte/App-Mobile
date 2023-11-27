@@ -134,7 +134,8 @@ function PaymentScreen({setVuolePagare, handleCrea, email}) {
 }
 
 const SetTessera = ({ navigation, route }) => {
-  const publishableKey = "pk_test_51N1TzKKy8OcUrFfrGTKEGh0HfSc8ZzobBjnfpmOsakeUgPwXTbzEWq0KfRvBsyhwpdll82kjjIdmRyItCFWR2k7H00zS0JO6Zt";
+  //const publishableKey = "pk_test_51N1TzKKy8OcUrFfrGTKEGh0HfSc8ZzobBjnfpmOsakeUgPwXTbzEWq0KfRvBsyhwpdll82kjjIdmRyItCFWR2k7H00zS0JO6Zt";
+  const publishableKey = "pk_live_51OEbwZB6ctiWBKB6EByHFj16xekQmsk9Dx6RoCK4RhfbK8BGaqJuAgXHoipKDAIxehjH2tylniKWtjEvA6yIxUYm00sF6Huulc";
   const { email, name } = route.params;
   const [numTessera, setNumTessera] = useState("");
   const [isYes, setIsYes] = useState(true);

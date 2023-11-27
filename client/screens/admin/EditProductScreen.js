@@ -32,10 +32,11 @@ const EditProductScreen = ({ navigation, route }) => {
   const [price, setPrice] = useState("");
   const [sku, setSku] = useState("");
   const [image, setImage] = useState("");
+  const [imageSend, setImageSend] = useState("");
   const [error, setError] = useState("");
   const [quantity, setQuantity] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("garments");
+  const [category, setCategory] = useState("");
   const [alertType, setAlertType] = useState("error");
   const [link, setLink] = useState("");
   const [data, setData] = useState(product.data ? product.data : "");
@@ -50,7 +51,7 @@ const EditProductScreen = ({ navigation, route }) => {
     title: title,
     sku: sku,
     price: price,
-    image: image,
+    image: imageSend,
     description: description,
     category: category,
     quantity: quantity,
@@ -66,6 +67,39 @@ const EditProductScreen = ({ navigation, route }) => {
     redirect: "follow",
   };
 
+  const upload = async (image, imageName) => {
+    console.log("upload-F:", image);
+  
+    try {
+      const formdata = new FormData();
+      formdata.append("photos", {
+        uri: image,
+        name: imageName,
+        type: mime.lookup(imageName),
+      });
+  
+      const ImageRequestOptions = {
+        method: "POST",
+        body: formdata,
+        redirect: "follow",
+      };
+  
+      const response = await fetch(
+        network.serverip + "/photos/upload",
+        ImageRequestOptions
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.error("error", error);
+    }
+  };
+
   //Method for selecting the image from device gallery
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -77,7 +111,11 @@ const EditProductScreen = ({ navigation, route }) => {
     });
     console.log(result);
     if (!result.cancelled) {
-      setImage(result.uri);
+      const selectedAsset = result.assets[0];
+      const imageName = selectedAsset.uri.split('/').pop();
+      setImage(selectedAsset.uri)
+      setImageSend(imageName);
+      upload(selectedAsset.uri, imageName);
     }
   };
 
@@ -124,6 +162,7 @@ const EditProductScreen = ({ navigation, route }) => {
   // set all the input fields and image on initial render
   useEffect(() => {
     setImage(`${network.serverip}/uploads/${product?.image}`);
+    setImageSend(product?.image);
     setTitle(product.title);
     setLink(product.link ? product.link : "");
     setData(product.data ? product.data : "");
@@ -132,6 +171,7 @@ const EditProductScreen = ({ navigation, route }) => {
     setPrice(product?.price?.toString());
     setDescription(product.description);
     setLuogo(product?.luogo);
+    setCategory(product?.category);
   }, []);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
