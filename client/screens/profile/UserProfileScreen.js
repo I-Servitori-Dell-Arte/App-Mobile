@@ -4,6 +4,7 @@ import {
   View,
   StatusBar,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import UserProfileCard from "../../components/UserProfileCard/UserProfileCard";
@@ -11,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import OptionList from "../../components/OptionList/OptionList";
 import { colors } from "../../constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ob from '../../assets/ob.png';
+import ob1 from '../../assets/ob1.png';
 import * as Progress from 'react-native-progress';
 
 const UserProfileScreen = ({ navigation, route }) => {
@@ -78,13 +81,31 @@ const UserProfileScreen = ({ navigation, route }) => {
       console.log("Errore:", error);
     });
   }
+
+  let progressImages = [];
+  for (let i = 0; i < 3; i++) {
+    if (i < user.partecipazione) {
+      progressImages.push(<Image key={i} source={ob} style={styles.imageok} />);
+    } else {
+      progressImages.push(<Image key={i} source={ob1} style={styles.image} />);
+    }
+  }
+
+  let progressImages5 = [];
+  for (let i = 0; i < 5; i++) {
+    if (i < user.partecipazione5) {
+      progressImages5.push(<Image key={i} source={ob} style={styles.image5ok} />);
+    } else {
+      progressImages5.push(<Image key={i} source={ob1} style={styles.image5} />);
+    }
+  }
   
   return (
     <View style={styles.container}>
       <StatusBar style="auto"></StatusBar>
       <View style={styles.TopBarContainer}>
         <TouchableOpacity>
-          <Ionicons name="menu-sharp" size={30} color={colors.primary} />
+          {/*<Ionicons name="menu-sharp" size={30} color={colors.primary} />*/}
         </TouchableOpacity>
       </View>
       <View style={styles.screenNameContainer}>
@@ -99,12 +120,12 @@ const UserProfileScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.obiettivi}>
         <View style={styles.obItem}>
-          <Text style={{color: 'white'}}>Partecipazioni per la tessera gratuita: {user.partecipazione && user.partecipazione >= 4 ? 3 : user.partecipazione}/3</Text>
-          <Progress.Bar
-          progress={completionPercentage3 && completionPercentage3} 
-          //width={100}
-          color="#fff"
-          style={{ marginVertical: 10, width: '100%' }} />
+          <Text style={{color: 'black', fontWeight: 500}}>Punti sconto: {user.partecipazione && user.partecipazione >= 4 ? 3 : user.partecipazione}/3</Text>
+          <Text style={{color: 'black'}}>sconto di 10€ se porti un amico</Text>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10,}}>
+           {progressImages.length > 0 && progressImages} 
+          </View>
+          
           {user.partecipazione && user.partecipazione >= 3 ? (
             <TouchableOpacity onPress={handleOttieniTessera} style={styles.ottieni}>
               <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Tessera</Text>
@@ -112,12 +133,16 @@ const UserProfileScreen = ({ navigation, route }) => {
           ) : null}
         </View>
         <View style={styles.obItem}>
-          <Text style={{color: 'white'}}>Partecipazioni per lo sconto: {user.partecipazione5 && user.partecipazione5 >= 6 ? 5 : user.partecipazione5}/5</Text>
-          <Progress.Bar
+          <Text style={{color: 'black', fontWeight: 500}}>Punti gratuità: {user.partecipazione5 && user.partecipazione5 >= 6 ? 5 : user.partecipazione5}/5</Text>
+          <Text style={{color: 'black'}}>sul prossimo tour</Text>
+         {/* <Progress.Bar
           progress={completionPercentage && completionPercentage} 
           //width={100}
           color="#fff"
-          style={{ marginVertical: 10, width: '100%' }} />
+          style={{ marginVertical: 10, width: '100%' }} />*/}
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10,}}>
+           {progressImages5.length > 0 && progressImages5} 
+          </View>
           {user.partecipazione5 && user.partecipazione5 >= 5 ? (
             <TouchableOpacity onPress={handleOttieniSconto} style={styles.ottieni}>
               <Text style={{color: colors.light_black, fontWeight: '500'}}>Ottieni Sconto</Text>
@@ -180,6 +205,26 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
   },
+  image: {
+    width: 35,
+    height: 35,
+    marginHorizontal: 5,
+  },
+  image5: {
+    width: 23,
+    height: 23,
+    marginHorizontal: 2,
+  },
+  image5ok: {
+    width: 28,
+    height: 28,
+    marginHorizontal: 2,
+  },
+  imageok: {
+    width: 40,
+    height: 40,
+    marginHorizontal: 5,
+  },
   TopBarContainer: {
     width: "100%",
     display: "flex",
@@ -196,8 +241,8 @@ const styles = StyleSheet.create({
   },
   obItem: {
     width: '45%',
-    minHeight: 80,
-    backgroundColor: colors.primary,
+    minHeight: 117,
+    backgroundColor: '#fff',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 5,

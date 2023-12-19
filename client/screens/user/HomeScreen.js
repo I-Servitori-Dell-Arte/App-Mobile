@@ -10,8 +10,12 @@ import {
   ScrollView,
   ImageBackground,
   ActivityIndicator,
+  Linking,
 } from "react-native";
 import tessera from '../../assets/tessera.png';
+//import tesserafronte from '../../assets/tessera-fronte.jpg';
+import tesserafronte from '../../assets/tessera-fronte1.png';
+import tesseraretro from '../../assets/tessera-retro.jpg';
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import cartIcon from "../../assets/icons/cart_beg.png";
@@ -56,8 +60,8 @@ const category = [
 ];
 
 const slides = [
-  require("../../assets/image/banners/banner.png"),
-  require("../../assets/image/banners/banner.png"),
+  require("../../assets/tessera-fronte.jpg"),
+  require("../../assets/tessera-fronte.jpg"),
 ];
 
 const HomeScreen = ({ navigation, route }) => {
@@ -194,13 +198,17 @@ const HomeScreen = ({ navigation, route }) => {
     filter();
   }, [filterItem]);
 
+    const openLink = (url) => {
+      Linking.openURL(url);
+    };
+
   return (
     <View style={styles.container}>
       <StatusBar></StatusBar>
       <View style={styles.topBarContainer}>
         <TouchableOpacity>
           {/*<Ionicons name="menu" size={30} color={colors.muted} />*/}
-          <Image source={menu} style={{ width: 16, height: 16 }} />
+          {/*<Image source={menu} style={{ width: 16, height: 16 }} />*/}
         </TouchableOpacity>
         <View style={styles.topbarlogoContainer}>
           <Image source={servitorilogo2} style={styles.logo} />
@@ -209,7 +217,7 @@ const HomeScreen = ({ navigation, route }) => {
           style={styles.cartIconContainer}
           //onPress={() => navigation.navigate("cart")}
         >
-          {cartproduct.length > 0 ? (
+        {/*  {cartproduct.length > 0 ? (
             <View style={styles.cartItemCountContainer}>
               <Text style={styles.cartItemCountText}>{cartproduct.length}</Text>
             </View>
@@ -220,27 +228,26 @@ const HomeScreen = ({ navigation, route }) => {
             name="cart"
             size={30}
             color={"white"}
-          />
+          />*/}
         </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
         <View style={styles.searchContainer}>
           <View style={styles.inputContainer}>
-          <CustomInput
+          {/*<CustomInput
             radius={5}
             placeholder={"Cerca..."}
             value={filterItem}
             setValue={setFilterItem}
           />
-            {/* <CustomInput radius={5} placeholder={"Search...."} /> */}
+        <CustomInput radius={5} placeholder={"Search...."} />*/}
           </View>
-          <View style={styles.buttonContainer}>
-            {/*
+          {/*<View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.scanButton}>
               <Text style={styles.scanButtonText}>Scan</Text>
               <Image source={scanIcon} style={{ width: 20, height: 20 }} />
-            </TouchableOpacity>*/}
-            </View>
+            </TouchableOpacity>
+      </View>*/}
         </View>
             <FlatList
               showsHorizontalScrollIndicator={false}
@@ -263,16 +270,17 @@ const HomeScreen = ({ navigation, route }) => {
               )}
             />
         <ScrollView nestedScrollEnabled={true}>
-          <View style={styles.promotiomSliderContainer}>
-            {/*<SliderBox
+            <View style={styles.promotiomSliderContainer}>
+              {/*<SliderBox    
               images={slides}
-              sliderBoxHeight={140}
+              sliderBoxHeight={190}
               dotColor={colors.primary}
               inactiveDotColor={colors.muted}
               paginationBoxVerticalPadding={10}
               autoplayInterval={6000}
-                  />*/}
-            <ImageBackground source={tessera} style={styles.face}>
+              ImageComponentStyle={{ borderRadius: 20, width: 350 }}
+                  />*/}  
+                <ImageBackground source={tesserafronte} style={styles.face}> 
                 <FlipCard 
                   style={styles.card}
                   friction={6}
@@ -283,27 +291,21 @@ const HomeScreen = ({ navigation, route }) => {
                   clickable={true}
                   //onFlipEnd={(isFlipEnd)=>{console.log('isFlipEnd', isFlipEnd)}}
                 >
-                  {/* Face Side */}
-          
                     <View style={styles.tesseraContent}>
-                      <Text style={styles.titleTessera}>Tessera Associativa</Text>
-                      <Text style={styles.textTessera}>Nome: {name}</Text>
-                      <Text style={styles.textTessera}>Email: {email}</Text>
-                    </View>
-   
-                  {/* Back Side */}
-                    <View style={styles.tesseraContent}>
-                      <Text style={styles.backtextTessera}>Numero: {numeroTessera}</Text>
+                      <Text style={styles.textTessera}>Tessera N°: {numeroTessera}</Text>
                       <Text style={styles.textTessera}>Scadenza: {formattedDate}</Text>
-                    </View>
+                    </View> 
+                    <View style={styles.tesseraContent}>
+                      <Text style={styles.textTessera}>Valida per {name}</Text>
+                    </View>                   
                 </FlipCard>
                 </ImageBackground>
-          </View>
+              </View>
           {/*<View style={styles.primaryTextContainer}>
             <Text style={styles.primaryText}>In promozione</Text>
             </View>*/}
           <View style={styles.primaryTextContainer}>
-            <Text style={styles.primaryText}>Nuovi eventi</Text>
+            <Text style={styles.primaryText}>Prossimi appuntamenti</Text>
           </View>
           {products.length === 0 ? (
             <View style={styles.productCardContainerEmpty}>
@@ -345,6 +347,19 @@ const HomeScreen = ({ navigation, route }) => {
               <View style={styles.emptyView}></View>
             </View>
           )}
+            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginBottom: 40, }}>
+              <TouchableOpacity onPress={() => openLink('https://www.facebook.com/iservitoridellarte/')}>
+                <Ionicons name="logo-facebook" size={35} color="blue" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => openLink('https://www.instagram.com/iservitoridellarte/')}>
+                <Ionicons name="logo-instagram" size={35} color="purple" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => openLink('https://www.iservitoridellarte.com/')}>
+                <Ionicons name="globe-outline" size={35} color="green" style={{ marginRight: 20 }} />
+              </TouchableOpacity>
+            </View>
         </ScrollView>
       </View>
     </View>
@@ -357,7 +372,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirecion: "row",
-    backgroundColor: colors.light,
+    backgroundColor: '#000', //colors.light,
     alignItems: "center",
     justifyContent: "flex-start",
     paddingBottom: 0,
@@ -382,7 +397,8 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: 20,
+    height: 25,
+    marginTop: 20,
   },
   card: {
     width: '100%',
@@ -390,24 +406,27 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flex: 1,
   },
   face: {
     height: '100%',
-    width: '95%',
+    width: '82%',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    left: '15%',
+    flex: 1,
   },
   tesseraContent: {
-    borderWidth: 2, 
-    borderColor: '#D7713C', 
+    //borderWidth: 2, 
+    //borderColor: '#D7713C', 
     borderRadius: 5,
     width: 250,
-    height: '70%',
+    height: '60%',
     paddingHorizontal: 10,
     paddingVertical: 10,
-    marginTop: 20,  
-    marginLeft: -15,
+    marginTop: 40,  
+    marginLeft: -25,
   },
   back: {
 
@@ -427,8 +446,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   logo: {
-    height: 70,
-    width: 220,
+    height: 90,
+    width: 260,
     resizeMode: "contain",
   },
   secondaryText: {
@@ -485,10 +504,12 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingTop: 10,
     paddingBottom: 10,
+    marginTop: 10,
   },
   primaryText: {
     fontSize: 20,
     fontWeight: "bold",
+    color: colors.light
   },
   flatListContainer: {
     width: "100%",
@@ -498,7 +519,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer2: {
     width: "99%",
-    height: 60,
+    height: 50,
     marginTop: -30,
     marginBottom: 0,
     marginHorizontal: 10,
@@ -508,27 +529,33 @@ const styles = StyleSheet.create({
     marginHorizontal: 0,
     marginVertical: 5,
     marginTop: 20,
-    height: 140,
-    backgroundColor: colors.light,
+    height: 210,
+    backgroundColor: '#000', //colors.light,
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
     width: '100%',
+    //marginLeft: 30,
   },
   textTessera: {
-    fontSize: 11,
+    fontSize: 15,
+    fontWeight: '500',
+    transform: [{ rotate: '-5deg' }],
+    marginTop: 20,
   },
   backtextTessera: {
     fontSize: 11,
     marginTop: 13,
   },
   titleTessera: {
-    fontSize: 13,
+    fontSize: 16,
     textAlign: 'center',
     marginTop: -5,
     marginBottom: 5,
     fontWeight: '500',
+    transform: [{ rotate: '-5deg' }],
   },
   categoryContainer: {
     display: "flex",

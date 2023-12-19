@@ -103,6 +103,7 @@ const CategoriesScreen = ({ navigation, route }) => {
       .then((result) => {
         if (result.success) {
           setCategories(result.categories);
+          setSelectedTab(result.categories[0])
           setError("");
         } else {
           setError(result.message);
@@ -113,7 +114,7 @@ const CategoriesScreen = ({ navigation, route }) => {
         console.log("error", error);
       });
   };
-  const [selectedTab, setSelectedTab] = useState(category[0]);
+  const [selectedTab, setSelectedTab] = useState();
 
   //method to fetch the product from server using API call
   const fetchProduct = () => {
@@ -182,7 +183,7 @@ const CategoriesScreen = ({ navigation, route }) => {
           <Ionicons
             name="arrow-back-circle-outline"
             size={30}
-            color={"black"}
+            color={"white"}
           />
         </TouchableOpacity>
 
@@ -191,7 +192,7 @@ const CategoriesScreen = ({ navigation, route }) => {
           style={styles.cartIconContainer}
           //onPress={() => navigation.navigate("cart")}
         >
-          {cartproduct?.length > 0 ? (
+          {/*{cartproduct?.length > 0 ? (
             <View style={styles.cartItemCountContainer}>
               <Text style={styles.cartItemCountText}>{cartproduct.length}</Text>
             </View>
@@ -202,11 +203,11 @@ const CategoriesScreen = ({ navigation, route }) => {
             name="cart"
             size={30}
             color={"black"}
-          />
+          />*/}
         </TouchableOpacity>
       </View>
       <View style={styles.bodyContainer}>
-        <View style={{ padding: 0, paddingLeft: 20, paddingRight: 20 }}>
+        <View style={{ padding: 0, paddingLeft: 20, paddingRight: 20, backgroundColor: colors.light_red, paddingBottom: 55, borderBottomLeftRadius: 20, borderBottomRightRadius: 20, }}>
           <CustomInput
             radius={5}
             placeholder={"Cerca..."}
@@ -218,8 +219,13 @@ const CategoriesScreen = ({ navigation, route }) => {
           data={categories.length > 0 && categories}
           keyExtractor={(index, item) => `${index}-${item}`}
           horizontal
-          style={{ flexGrow: 0 }}
-          contentContainerStyle={{ padding: 10 }}
+          style={{ flexGrow: 0, zIndex: 20, marginTop: -25, height: 70 }}
+          contentContainerStyle={{ 
+            zIndex: 20,
+            marginBottom: 0,
+            marginHorizontal: 10,
+            paddingRight: 10,
+           }}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item: tab }) => (
             <CustomIconButton
@@ -308,7 +314,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     flex: 1,
-    paddingTop: 40,
+    paddingTop: 0,
   },
   topBarContainer: {
     width: "100%",
@@ -317,6 +323,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     padding: 20,
+    backgroundColor: colors.light_red,
+    paddingTop: 40,
   },
   toBarText: {
     fontSize: 15,
@@ -326,8 +334,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     flexDirecion: "row",
-    backgroundColor: colors.light,
-
+    backgroundColor: '#000', //colors.light,
     justifyContent: "flex-start",
     flex: 1,
   },

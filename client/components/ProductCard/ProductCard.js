@@ -24,14 +24,11 @@ const ProductCard = ({
       </View>
       <View style={styles.infoContainer}>
         <View>
-          <Text style={styles.secondaryTextSm}>{`${name?.substring(
-            0,
-            11
-          )}..`}</Text>
-          <Text style={styles.descText}>{`${description?.substring(
+          <Text style={styles.secondaryTextSm}>{name && name}</Text>
+          {/*<Text style={styles.descText}>{`${description?.substring(
             0,
             50
-          )}..`}</Text>
+          )}..`}</Text>*/}
         </View>
 {/*        <View>
           {quantity > 0 ? (

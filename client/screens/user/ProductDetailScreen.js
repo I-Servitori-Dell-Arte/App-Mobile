@@ -71,7 +71,12 @@ const ProductDetailScreen = ({ navigation, route }) => {
   const [isDisable, setIsDisbale] = useState(true);
   const [alertType, setAlertType] = useState("error");
 
-  //method to fetch wishlist from server using API call
+  const extractParagraphs = (text) => {
+    return text ? text.split('.').map((paragraph) => paragraph.trim()) : [];
+  };
+
+  const paragraphs = extractParagraphs(product?.description);
+
   const fetchWishlist = async () => {
     const value = await AsyncStorage.getItem("authUser"); // get authUser from async storage
     let user = JSON.parse(value);
@@ -305,7 +310,13 @@ const ProductDetailScreen = ({ navigation, route }) => {
                   <ScrollView>
                   <View style={styles.productDescriptionContainer}>
                     <Text style={styles.secondaryTextSm}>Descrizione:</Text>
-                    <Text>{product?.description}</Text>   
+                    {/*<Text>{product?.description}</Text>  */}
+                    {paragraphs && paragraphs.map((paragraph, index) => (
+                        <React.Fragment key={index}>
+                          <Text>{paragraph}.</Text>
+                          {index < paragraphs.length - 1 && <Text style={{height: 10}}>{'\n\n'}</Text>}
+                        </React.Fragment>
+                      ))} 
                    </View>             
                   </ScrollView>
                 
@@ -336,7 +347,7 @@ const ProductDetailScreen = ({ navigation, route }) => {
             <View style={styles.productButtonContainer}>
               {avaiableQuantity > 0 ? (
                 <CustomButton
-                  text={"Vai al negozio"}
+                  text={"SCOPRI DI PIÙ"}
                   onPress={() => {
                     handleAddToCat(product);
                   }}
@@ -446,7 +457,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     paddingVertical: 4,
     paddingHorizontal: 16,
-    backgroundColor: '#3D56F0',
+    backgroundColor: colors.primary,
     color: 'white',
     display: 'flex',
     alignItems: 'center',
