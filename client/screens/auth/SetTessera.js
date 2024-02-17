@@ -5,137 +5,10 @@ import { colors, network } from "../../constants";
 import CustomInput from "../../components/CustomInput";
 import CustomButton from "../../components/CustomButton";
 import CustomAlert from "../../components/CustomAlert/CustomAlert";
-import { StripeProvider } from '@stripe/stripe-react-native';
-import { CardField, useStripe } from '@stripe/stripe-react-native';
 import loading from '../../assets/loading.json';
 import success from '../../assets/success.json';
 
-function PaymentScreen({setVuolePagare, handleCrea, email}) {
-  const { confirmPayment } = useStripe();
-  const [clientSecret, setClientSecret] = useState(''); 
-  const [paymentIntentId, setPayIntId] = useState("");
-  console.log(paymentIntentId);
-  const [paymentInProgress, setPaymentInProgress] = useState(false);
-  const [ok, setOk] = useState(false);
-
-
-  const fetchClientSecret = async () => {
-    try {
-      const response = await fetch(network.serverip + "/create-payment", {
-        method: "POST", // Cambia il metodo da "GET" a "POST"
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }), 
-      });
-      const data = await response.json();
-      console.log(data);
-      setClientSecret(data.clientSecret);
-      setPayIntId(data.paymentIntentId);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchClientSecret();
-  }, []);
-
-  const confirmPaymentBack = async (paymentMethodId) => {
-    console.log(paymentMethodId);
-    try {
-      const response = await fetch(network.serverip+'/confirm-payment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          paymentMethodId: paymentMethodId,
-          paymentIntentId: paymentIntentId,
-        }),
-      });
-
-      const result = await response.json();
-      console.log(result);
-
-      setPaymentInProgress(false);
-      setOk(true);
-      setTimeout(() => {
-        setVuolePagare(false);
-        handleCrea();
-      }, 2000)
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const handlePayment = async () => {
-    setPaymentInProgress(true);
-    try {
-      const confirmPaymentResponse = await confirmPayment(clientSecret, {
-        paymentMethodType: 'Card',
-        billingDetails: {
-          email: email,
-        },
-      });
-      
-      
-      const paymentMethodId = confirmPaymentResponse.paymentIntent.paymentMethodId;;
-      console.log('paymentMethodId:', paymentMethodId);
-
-      confirmPaymentBack(paymentMethodId);
-      //setPaymentInProgress(false);
-      /*setOk(true);
-      setTimeout(() => {
-        setVuolePagare(false);
-        handleCrea();
-      }, 10000)*/
-
-    } catch (error) {
-      console.error('Errore nel pagamento:', error);
-    }
-  };
-
-  return (
-    <>
-    <CardField
-      postalCodeEnabled={true}
-      placeholders={{
-        number: '4242 4242 4242 4242',
-      }}
-      cardStyle={{
-        backgroundColor: '#FFFFFF',
-        textColor: '#000000',
-      }}
-      style={{
-        width: '100%',
-        height: 50,
-        marginVertical: 30,
-      }}
-      onCardChange={(cardDetails) => {
-        console.log('cardDetails', cardDetails);
-      }}
-      onFocus={(focusedField) => {
-        console.log('focusField', focusedField);
-      }}
-    />
-    {/*ok && (
-      <LottieView
-        source={success} 
-        autoPlay
-      />
-    )*/}
-    <TouchableOpacity style={styles.paga} onPress={clientSecret !== "" ? handlePayment : null}>
-      <Text style={{color: 'white'}}>{paymentInProgress ? "Pagamento in corso.." : "Paga"}</Text>
-    </TouchableOpacity>
-    </>
-  );
-}
-
 const SetTessera = ({ navigation, route }) => {
-  //const publishableKey = "pk_test_51N1TzKKy8OcUrFfrGTKEGh0HfSc8ZzobBjnfpmOsakeUgPwXTbzEWq0KfRvBsyhwpdll82kjjIdmRyItCFWR2k7H00zS0JO6Zt";
-  const publishableKey = "pk_live_51OEbwZB6ctiWBKB6EByHFj16xekQmsk9Dx6RoCK4RhfbK8BGaqJuAgXHoipKDAIxehjH2tylniKWtjEvA6yIxUYm00sF6Huulc";
   const { email, name } = route.params;
   const [numTessera, setNumTessera] = useState("");
   const [isYes, setIsYes] = useState(true);
@@ -284,7 +157,6 @@ const SetTessera = ({ navigation, route }) => {
         </ScrollView>
       ) : ( 
         <ScrollView style={{ flex: 1, width: "100%", marginBottom: 60 }}>
-           {!vuolePagare ? (
           <View style={styles.formContainer}>
             <CustomAlert message={error} type={"error"} />
             <CustomInput
@@ -331,19 +203,11 @@ const SetTessera = ({ navigation, route }) => {
               placeholderTextColor={colors.muted}
               radius={5}
             />
-          </View>)
-          : 
-        (<StripeProvider
-        publishableKey={publishableKey}
-        urlScheme="your-url-scheme"
-        >
-        <PaymentScreen setVuolePagare={setVuolePagare} handleCrea={handleCrea} email={email} />
-      </StripeProvider>  
-      )} 
+          </View>
         </ScrollView>
       )}
 
-        <TouchableOpacity style={styles.btnAvanti} onPress={isYes ? () => handleAssocia() : () => pagaPrima()}>
+        <TouchableOpacity style={styles.btnAvanti} onPress={isYes ? () => handleAssocia() : () => handleCrea()}>
           <Text style={{ color: '#FFF', fontSize: 16 }}>Prosegui</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>

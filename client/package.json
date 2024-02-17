@@ -18,12 +18,14 @@
     "@stripe/stripe-react-native": "0.28.0",
     "date-fns": "^2.30.0",
     "expo": "~49.0.13",
+    "expo-device": "~5.4.0",
     "expo-file-system": "~15.4.5",
     "expo-image": "~1.3.5",
     "expo-image-picker": "~14.3.2",
     "expo-media-library": "~15.4.1",
+    "expo-notifications": "~0.20.1",
     "expo-status-bar": "~1.6.0",
-    "expo-updates": "~0.18.17",
+    "expo-updates": "~0.18.18",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "react": "18.2.0",
@@ -53,9 +55,7 @@
     "react-native-web": "^0.19.9",
     "react-redux": "^8.1.3",
     "redux": "^4.2.1",
-    "redux-thunk": "^2.4.2",
-    "expo-notifications": "~0.20.1",
-    "expo-device": "~5.4.0"
+    "redux-thunk": "^2.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
