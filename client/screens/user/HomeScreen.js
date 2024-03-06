@@ -13,6 +13,7 @@ import {
   Linking,
 } from "react-native";
 import tessera from '../../assets/tessera.png';
+import moment from "moment";
 //import tesserafronte from '../../assets/tessera-fronte.jpg';
 import tesserafronte from '../../assets/tessera-fronte1.png';
 import tesseraretro from '../../assets/tessera-retro.jpg';
@@ -33,7 +34,6 @@ import SearchableDropdown from "react-native-searchable-dropdown";
 import { SliderBox } from "react-native-image-slider-box";
 import menu from "../../assets/image/menu-icon.png";
 import FlipCard from 'react-native-flip-card'
-import moment from 'moment';
 import CustomInput from "../../components/CustomInput";
 
 const category = [
@@ -325,7 +325,18 @@ const HomeScreen = ({ navigation, route }) => {
                 showsHorizontalScrollIndicator={false}
                 initialNumToRender={5}
                 horizontal={true}
-                data={products.slice(0, 4)}
+                data={products
+                  .sort((a, b) => {
+                    const today = new Date();
+                    const dateA = new Date(a.data);
+                    const dateB = new Date(b.data);
+                    
+                    const diffA = Math.abs(today - dateA);
+                    const diffB = Math.abs(today - dateB);
+              
+                    return diffA - diffB;
+                  })
+                  .slice(0, 4)}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item, index }) => (
                   <View
@@ -337,6 +348,7 @@ const HomeScreen = ({ navigation, route }) => {
                       image={`${network.serverip}/uploads/${item.image}`}
                       price={item.price}
                       quantity={item.quantity}
+                      date={moment(item?.data).format('DD/MM/YYYY')}
                       description={item.description}
                       onPress={() => handleProductPress(item)}
                       onPressSecondary={() => handleAddToCat(item)}
@@ -519,7 +531,7 @@ const styles = StyleSheet.create({
   },
   flatListContainer2: {
     width: "99%",
-    height: 50,
+    height: 60,
     marginTop: -30,
     marginBottom: 0,
     marginHorizontal: 10,

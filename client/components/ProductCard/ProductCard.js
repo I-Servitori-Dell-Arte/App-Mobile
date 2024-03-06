@@ -12,7 +12,7 @@ const ProductCard = ({
   onPressSecondary,
   cardSize,
   description,
-  date= '10 Agosto'
+  date
 }) => {
   return (
     <TouchableOpacity

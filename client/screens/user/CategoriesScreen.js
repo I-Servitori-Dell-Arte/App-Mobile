@@ -15,6 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 import cartIcon from "../../assets/icons/cart_beg.png";
 import emptyBox from "../../assets/image/emptybox.png";
 import { colors, network } from "../../constants";
+import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actionCreaters from "../../states/actionCreaters/actionCreaters";
@@ -268,7 +269,16 @@ const CategoriesScreen = ({ navigation, route }) => {
           <FlatList
             data={foundItems.filter(
               (product) => product?.category?._id === selectedTab?._id
-            )}
+            ).sort((a, b) => {
+              const today = new Date();
+              const dateA = new Date(a.data);
+              const dateB = new Date(b.data);
+              
+              const diffA = Math.abs(today - dateA);
+              const diffB = Math.abs(today - dateB);
+        
+              return diffA - diffB;
+            })}
             refreshControl={
               <RefreshControl
                 refreshing={refeshing}
@@ -291,6 +301,7 @@ const CategoriesScreen = ({ navigation, route }) => {
                   image={`${network.serverip}/uploads/${product.image}`}
                   description={product?.description}
                   quantity={product?.quantity}
+                  date={moment(product?.data).format('DD/MM/YYYY')}
                   onPress={() => handleProductPress(product)}
                   onPressSecondary={() => handleAddToCat(product)}
                 />
