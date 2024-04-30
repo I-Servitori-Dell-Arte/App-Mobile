@@ -30,6 +30,7 @@ import ViewUserScreen from "../screens/admin/ViewUserScreen";
 import ViewTessereScreen from "../screens/admin/ViewTessereScreen.js";
 import AddTesseraScreen from "../screens/admin/AddTesseraScreen.js";
 import EditTesseraScreen from "../screens/admin/EditTesseraScreen.js";
+import AddUser from "../screens/admin/AddUser.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -72,6 +73,7 @@ const Routes = () => {
         <Stack.Screen name="addcategories" component={AddCategoryScreen} />
         <Stack.Screen name="editcategories" component={EditCategoryScreen} />
         <Stack.Screen name="viewusers" component={ViewUsersScreen} />
+        <Stack.Screen name="adduser" component={AddUser} />
         <Stack.Screen name="categories" component={CategoriesScreen} />
       </Stack.Navigator>
     </NavigationContainer>

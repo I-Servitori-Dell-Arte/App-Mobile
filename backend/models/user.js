@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
     partecipazione5: {type: Number, default: 0},
     tesseraGratis: {type: Boolean, default: false},
     scontoGratis: {type: Boolean, default: false},
+    numTessera: {type: String},
 },{timestamps: true})
 
 

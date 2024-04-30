@@ -5,6 +5,7 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
+  Linking
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import UserProfileCard from "../../components/UserProfileCard/UserProfileCard";
@@ -99,6 +100,24 @@ const UserProfileScreen = ({ navigation, route }) => {
       progressImages5.push(<Image key={i} source={ob1} style={styles.image5} />);
     }
   }
+
+  const openEmailApp = () => {
+    const email = "info@iservitoridellarte.com";
+    const subject = encodeURIComponent("Richiesta di assistenza");
+    const body = encodeURIComponent("Scrivi qui la richiesta...");
+
+    const url = `mailto:${email}?subject=${subject}&body=${body}`;
+
+    Linking.canOpenURL(url)
+    .then((supported) => {
+        if (!supported) {
+            console.log("Non posso gestire l'url: " + url);
+        } else {
+            return Linking.openURL(url);
+        }
+    })
+    .catch((err) => console.error('Si è verificato un errore:', err));
+};
   
   return (
     <View style={styles.container}>
@@ -163,6 +182,12 @@ const UserProfileScreen = ({ navigation, route }) => {
           Icon={Ionicons}
           iconName={"heart"}
           onPress={() => navigation.navigate("mywishlist", { user: userInfo })}
+        />
+        <OptionList
+          text={"Assistenza"}
+          Icon={Ionicons}
+          iconName={"help"}
+          onPress={openEmailApp}
         />
         {/* !For future use --- */}
         {/* <OptionList

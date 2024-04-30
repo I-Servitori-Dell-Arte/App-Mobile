@@ -2,7 +2,7 @@
   "expo": {
     "name": "I Servitori Dell'Arte",
     "slug": "iservitoridellarte",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -27,7 +27,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.iservitoridellarte"
+      "package": "com.iservitoridellarte",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"

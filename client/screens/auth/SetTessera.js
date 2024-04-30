@@ -155,7 +155,7 @@ const SetTessera = ({ navigation, route }) => {
               />
             </View>  
         </ScrollView>
-      ) : ( 
+      ) : (
         <ScrollView style={{ flex: 1, width: "100%", marginBottom: 60 }}>
           <View style={styles.formContainer}>
             <CustomAlert message={error} type={"error"} />

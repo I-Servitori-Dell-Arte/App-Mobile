@@ -2,7 +2,9 @@ const User = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 const nodemailer = require('nodemailer');
+const Tessera = require("../../models/tessera");
 const crypto = require('crypto');
+const tessera = require("../../models/tessera");
 const JWT_SECRET_KEY = process.env.TOKEN_KEY
 
 function generateTempCode() {
@@ -157,9 +159,8 @@ module.exports.login = async (req, res) => {
 module.exports.register = async (req, res) => {
   console.log(req.body);
   try {
-    const { email, password, name, userType } = req.body;
+    const { email, password, name, userType, numTessera } = req.body;
 
-    // if any one of the field from email and password is not filled
     if (!email || !password) {
       return res.json({
         success: false,
@@ -167,10 +168,16 @@ module.exports.register = async (req, res) => {
       });
     }
     req.body.password = await bcrypt.hash(password, 10);
-
+    const tessera = await Tessera.findOne({numeroTessera: numTessera});
+    if (!tessera){
+      console.error('Non trovata')
+    }
     const user = new User(req.body);
-    await user.save();
 
+    user.tessera = tessera._id;
+    tessera.user = user._id;
+    await tessera.save();
+    await user.save();
     return res.json({
       success: true,
       message: "user registered successfully",

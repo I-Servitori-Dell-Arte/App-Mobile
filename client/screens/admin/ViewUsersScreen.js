@@ -177,8 +177,10 @@ const ViewUsersScreen = ({ navigation, route }) => {
             color={colors.muted}
           />
         </TouchableOpacity>
-        <TouchableOpacity disabled>
-          <AntDesign name="user" size={25} color={colors.primary} />
+        <TouchableOpacity
+        onPress={() => navigation.navigate('adduser')} 
+        >
+          <AntDesign name="plus" size={25} color={colors.primary} />
         </TouchableOpacity>
       </View>
       <View style={styles.screenNameContainer}>
@@ -264,6 +266,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    paddingRight: 30,
+    paddingVertical: 10,
   },
   formContainer: {
     flex: 2,

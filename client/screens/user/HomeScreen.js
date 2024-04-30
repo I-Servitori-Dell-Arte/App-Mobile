@@ -112,9 +112,11 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const fetchProduct = async() => {
+    console.log(network)
     fetch(`${network.serverip}/products`, headerOptions) //API call
       .then((response) => response.json())
       .then((result) => {
+        console.log(result)
         if (result.success) {
           setProducts(result.data);
           setProductsOr(result.data);
