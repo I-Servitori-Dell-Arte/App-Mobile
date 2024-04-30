@@ -108,7 +108,7 @@ const UserProfileScreen = ({ navigation, route }) => {
 
     const url = `mailto:${email}?subject=${subject}&body=${body}`;
 
-    Linking.canOpenURL(url)
+    Linking.openURL(url)
     .then((supported) => {
         if (!supported) {
             console.log("Non posso gestire l'url: " + url);

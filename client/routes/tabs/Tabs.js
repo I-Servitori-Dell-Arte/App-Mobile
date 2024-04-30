@@ -52,13 +52,13 @@ const Tabs = ({ navigation, route }) => {
               <TouchableOpacity disabled>
                 {focused == true ? (
                   <Ionicons
-                    name="ios-apps-sharp"
+                    name="apps-sharp"
                     size={29}
                     color={colors.primary}
                   />
                 ) : (
                   <Ionicons
-                    name="ios-apps-sharp"
+                    name="apps-sharp"
                     size={29}
                     color={colors.muted}
                   />
