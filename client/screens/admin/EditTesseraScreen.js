@@ -61,13 +61,7 @@ import {
       setIsloading(true);
       //[check validations] -- Start
       if (title == "") {
-        setError("Please enter the product title");
-        setIsloading(false);
-      } else if (description == "") {
-        setError("Please upload the product image");
-        setIsloading(false);
-      } else if (image == null) {
-        setError("Please upload the Catergory image");
+        setError("Per favore inserisci il titolo");
         setIsloading(false);
       } else {
         //[check validations] -- End

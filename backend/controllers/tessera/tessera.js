@@ -70,17 +70,13 @@ module.exports.createTessera = async (req, res) => {
 
 module.exports.createTesseraAdmuin = async (req, res) => {
 try {
-  const { name, residenza, cellulare, numeroTessera } = req.body;
-
-  const today = new Date();
-  const scadenza = new Date(today);
-  scadenza.setFullYear(scadenza.getFullYear() + 1);
+  const { name, residenza, cellulare, numeroTessera, dataScadenza } = req.body;
 
   const tessera = new Tessera({
     name,
     residenza,
     cellulare,
-    dataScadenza: scadenza.toISOString(), 
+    dataScadenza: dataScadenza.toISOString(),
     numeroTessera: numeroTessera,
   });
 

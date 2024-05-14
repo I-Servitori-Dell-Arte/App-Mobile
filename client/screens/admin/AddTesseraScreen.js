@@ -16,7 +16,7 @@ import {
   import CustomAlert from "../../components/CustomAlert/CustomAlert";
   import * as ImagePicker from "expo-image-picker";
   import ProgressDialog from "react-native-progress-dialog";
-  import { AntDesign } from "@expo/vector-icons";
+  import DateTimePicker from '@react-native-community/datetimepicker';
   
   const AddTesseraScreen = ({ navigation, route }) => {
     const { authUser } = route.params; //authUser data
@@ -28,6 +28,7 @@ import {
     const [numeroTessera, setNumeroTessera] = useState("");
     const [error, setError] = useState("");
     const [alertType, setAlertType] = useState("error");
+    const [dataScadMod, setDataScadMod] = useState(new Date());
     const [user, setUser] = useState({});
   
     //method to convert the authUser to json object.
@@ -40,8 +41,17 @@ import {
       }
       return JSON.parse(obj).token;
     };
+
+    const onChangeDate = (event, selected) => {
+      if (event.type === 'set') {
+        setDataScadMod(selected);
+        setDataScadMod(selected);
+        console.log(selected);
+      } else if (event.type === 'dismissed') {
+        return
+      }
+    };
   
-    //Method for imput validation post data to server to insert category using API call
     const addCategoryHandle = () => {
       var myHeaders = new Headers();
       myHeaders.append("x-auth-token", authUser.token);
@@ -51,7 +61,8 @@ import {
         name: title,
         cellulare: phone,  
         numeroTessera: numeroTessera,
-        residenza: residenza,      
+        residenza: residenza, 
+        dataScadenza: dataScadMod,     
       });
   
       var requestOptions = {
@@ -64,13 +75,7 @@ import {
       setIsloading(true);
       //[check validation] -- Start
       if (title == "") {
-        setError("Please enter the product title");
-        setIsloading(false);
-      } else if (phone == "") {
-        setError("Please upload the product image");
-        setIsloading(false);
-      } else if (image == null) {
-        setError("Please upload the Catergory image");
+        setError("Per favore inserisci il titolo");
         setIsloading(false);
       } else {
         //[check validation] -- End
@@ -163,6 +168,21 @@ import {
               placeholderTextColor={colors.muted}
               radius={5}
             />
+          <Text style={{
+            fontSize: 22,
+            marginTop: 26,
+            marginBottom: 10,
+            fontWeight: '500',
+            color: colors.muted,
+            textAlign: 'center',
+          }}>Modifica la data</Text>
+          <DateTimePicker
+            value={dataScadMod && dataScadMod}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeDate}
+          />
           </View>
         </ScrollView>
   
